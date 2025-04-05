@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "AdminPanel";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<link rel="stylesheet" href="~/css/adminPanel.css" />
+
+<div class="container">
+    <div class="admin-panel">
+        <h2>@ViewBag.Message</h2>
+        <p>Здесь панель администратора</p>
+        <button class="btn-admin" id="openModalAdmin">Добавить книгу</button>
+    </div>
+</div>
+<div id="modalOverlayAdmin" class="modal-overlay-admin">
+    <div class="modal-window-admin">
+        <span class="close-button-admin" id="closeModalAdmin">&times;</span>
+        <div class="logo-image-lr">
+            <img src="~/images/icon.png" alt="logo" />
+            <h3 class="add-title-admin">Добавить книгу</h3>
+        </div>
+
+        <div class="form-items">
+            <div id="adminForm">
+                <form asp-controller="Index" asp-action="Ok" method="post">
+                    <div class="form-group">
+                        <input type="text" name="title" class="form-control" placeholder="Название" id="Title" />
+                    </div>
+                    <div class="form-group">
+                        <select name="genres" class="form-control" id="Genres">
+                            <option value="" disabled selected>Выберите жанр</option>
+                            <option value="Фэнтези">Фэнтези</option>
+                            <option value="Научная фантастика">Научная фантастика</option>
+                            <option value="Детектив">Детектив</option>
+                            <option value="Исторический роман">Исторический роман</option>
+                            <option value="Биография">Биография</option>
+                            <option value="Ужасы">Ужасы</option>
+                            <option value="Комедия">Комедия</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="author" class="form-control" placeholder="Автор" id="Author" />
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="image" class="form-control" placeholder="Автор" id="Image" accept="image/admin/*" />
+                    </div>
+                    <div class="form-group">
+                        <img id="imagePreview" src="" alt="Preview" style="max-width: 200px; max-height: 200px;" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="desc" class="form-control" placeholder="Описание" id="Desc" rows="4" />
+                    </div>
+                    <button type="submit" class="btn-lr" id="addBooksForAdmin" disabled>Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("openModalAdmin").addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("modalOverlayAdmin").style.display = "flex";
+    });
+
+    document.getElementById("closeModalAdmin").addEventListener("click", function () {
+        document.getElementById("modalOverlayAdmin").style.display = "none";
+    });
+
+    window.addEventListener("click", function (e) {
+        if (e.target === document.getElementById("modalOverlayAdmin")) {
+            document.getElementById("modalOverlayAdmin").style.display = "none";
+        }
+    });
+
+</script>
+
+

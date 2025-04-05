@@ -1,0 +1,64 @@
+﻿
+.container-title {
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+.detail {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 40px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.card{
+    min-width:280px;
+}
+.card-detail {
+    padding: 5px 20px 20px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    min-width: 280px;
+    background: white;
+}
+.placeholder-img {
+    height: 250px;
+    width: 270px;
+    background: lightgrey;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display:block;
+    margin:15px auto 5px;
+    background: linear-gradient(to right, orange, darkorange);
+    border: none;
+    color: white;
+    cursor:pointer;
+}
+.dots {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.full-description {
+    margin-top: 10px;
+    color: #333;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+.search-bar input {
+     width: 100%;
+     padding: 10px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     font-size: 16px;
+}

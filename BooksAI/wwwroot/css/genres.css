@@ -1,0 +1,37 @@
+﻿
+.catalog {
+    margin-top:40px;
+    text-align: center;
+}
+
+.catalog-title {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.genres-container {
+    display: grid;
+    margin-top: 15px;
+    grid-template-columns: repeat(3,1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.genre {
+    background: white;
+    color: black;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    min-width: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+ .genre:hover {
+     transform: scale(1.1);
+  }

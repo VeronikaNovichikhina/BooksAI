@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Amazing Books</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+    
+    <link rel="stylesheet" href="~/css/loginOrRegister.css" asp-append-version="true">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-image">
+                <img src="~/images/icon.png" alt="logo" />
+                <h3 class="logo">Amazing Books</h3>
+            </div>
+            <nav>
+                <ul class="nav">
+                    <li><a asp-controller="Home" asp-action="Index">Главная</a></li>
+                    <li><a asp-controller="Genres" asp-action="Index">Жанры</a></li>
+                    <li><a asp-controller="About" asp-action="Index">О сервисе</a></li>
+                </ul>
+            </nav>
+            <div class="logo-image-card" >
+                <a asp-controller="Basket" asp-action="Index"><img src="~/images/card.png" alt="card" /></a>
+                <a href="#" id="openModal">
+                    <img src="~/images/login.png" alt="login" />
+                </a>
+            </div>
+        </header>
+    </div>
+
+    @RenderBody()
+    
+   
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-window">
+            <span class="close-button" id="closeModal">&times;</span>
+            <div class="logo-image-lr">
+                <img src="~/images/icon.png" alt="logo" />
+            </div>
+
+            <div class="form-items">
+                <div class="tab-switch">
+                    <button id="loginTab" class="tab active">Вход</button>
+                    <button id="registerTab" class="tab">Регистрация</button>
+                </div>
+
+                <div id="loginForm">
+                    <form asp-controller="Index" asp-action="Login" method="post">
+                        <div class="form-group">
+                            <input type="text" name="email" class="form-control" placeholder="Email" id="loginEmail" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="Пароль" id="loginPassword" required />
+                        </div>
+                        <button type="submit" class="btn-lr" id="loginButton" disabled>Войти</button>
+                    </form>
+                </div>
+
+                <div id="registerForm" style="display:none">
+                    <form asp-controller="Index" asp-action="Register" method="post">
+                        <div class="form-group">
+                            <input type="text" name="username" class="form-control" placeholder="Логин" id="registerUsername" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" placeholder="Email" id="registerEmail" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="Пароль" id="registerPassword" required />
+                        </div>
+                        <button type="submit" class="btn-lr" id="registerButton" disabled>Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function checkFormFields() {
+            const loginEmail = document.getElementById("loginEmail");
+            const loginPassword = document.getElementById("loginPassword");
+            const loginButton = document.getElementById("loginButton");
+
+            const registerUsername = document.getElementById("registerUsername");
+            const registerEmail = document.getElementById("registerEmail");
+            const registerPassword = document.getElementById("registerPassword");
+            const registerButton = document.getElementById("registerButton");
+
+            loginButton.disabled = !(loginEmail.value && loginPassword.value);
+            registerButton.disabled = !(registerUsername.value && registerEmail.value && registerPassword.value);
+        }
+        const loginTab = document.getElementById("loginTab");
+        const registerTab = document.getElementById("registerTab");
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+
+        loginTab.addEventListener("click", function () {
+            loginForm.style.display = "block";
+            registerForm.style.display = "none";
+            loginTab.classList.add("active");
+            registerTab.classList.remove("active");
+        });
+        registerTab.addEventListener("click", function () {
+            loginForm.style.display = "none";
+            registerForm.style.display = "block";
+            registerTab.classList.add("active");
+            loginTab.classList.remove("active");
+        });
+
+        document.getElementById("openModal").addEventListener("click", function (e) {
+            e.preventDefault();
+            document.getElementById("modalOverlay").style.display = "flex";
+        });
+
+        document.getElementById("closeModal").addEventListener("click", function () {
+            document.getElementById("modalOverlay").style.display = "none";
+        });
+
+        window.addEventListener("click", function (e) {
+            if (e.target === document.getElementById("modalOverlay")) {
+                document.getElementById("modalOverlay").style.display = "none";
+            }
+        });
+
+        document.getElementById("loginEmail").addEventListener("input", checkFormFields);
+        document.getElementById("loginPassword").addEventListener("input", checkFormFields);
+        document.getElementById("registerUsername").addEventListener("input", checkFormFields);
+        document.getElementById("registerEmail").addEventListener("input", checkFormFields);
+        document.getElementById("registerPassword").addEventListener("input", checkFormFields);
+    </script>
+    
+</body>
+</html>
