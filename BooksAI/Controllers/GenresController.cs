@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BooksAI.Controllers
 {
@@ -8,5 +9,6 @@ namespace BooksAI.Controllers
         {
             return View();
         }
+
     }
 }

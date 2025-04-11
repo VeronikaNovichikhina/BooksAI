@@ -1,9 +1,12 @@
 ﻿@using static BooksAI.Controllers.GenresDetailController
+@using BooksAI.Models
+
+
 @{
     ViewData["Title"] = "Жанр";
 
 }
-@model List<Book>;
+@model IEnumerable<Book>
 <link rel="stylesheet" href="~/css/genresdetail.css" />
 <script src="~/js/site.js"></script>
 
