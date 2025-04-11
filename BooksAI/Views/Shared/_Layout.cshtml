@@ -8,7 +8,6 @@
 
     @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-    
     <link rel="stylesheet" href="~/css/loginOrRegister.css" asp-append-version="true">
 </head>
 <body>
@@ -53,12 +52,13 @@
                 <div id="loginForm">
                     <form asp-controller="Index" asp-action="Login" method="post">
                         <div class="form-group">
-                            <input type="text" name="email" class="form-control" placeholder="Email" id="loginEmail" required />
+                            <input type="email" name="email" class="form-control  " placeholder="example@mail.ru" id="loginEmail" required />
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" class="form-control" placeholder="Пароль" id="loginPassword" required />
                         </div>
                         <button type="submit" class="btn-lr" id="loginButton" disabled>Войти</button>
+
                     </form>
                 </div>
 
