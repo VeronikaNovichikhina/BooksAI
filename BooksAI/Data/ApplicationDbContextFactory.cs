@@ -15,7 +15,7 @@ namespace BooksAI.Data
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MSSQL"));
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
