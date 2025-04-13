@@ -3,6 +3,7 @@ using BooksAI.Data;
 using BooksAI.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace BooksAI.Controllers
 {
@@ -24,22 +25,32 @@ namespace BooksAI.Controllers
         [HttpPost]
         public IActionResult Login(string email, string password)
         {
-            if (email == "lipchanskayakatya@gmail.com")
+            if (email == "admin@example.com")
             {
                 ViewBag.Error = "Этот email принадлежит администратору.";
                 return View();
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
-            if (user == null)
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null || !VerifyPassword(user.Password, password))  // Проверка пароля
             {
                 ViewBag.Error = "Неправильный email или пароль.";
                 return View();
             }
 
-            HttpContext.Session.SetString("UserEmail", email);
+            HttpContext.Session.SetString("UserEmail", user.Email);
+            HttpContext.Session.SetString("UserRole", user.Role);
             return RedirectToAction("Index", "Home");
         }
+
+        // Метод для проверки пароля
+        private bool VerifyPassword(string storedHash, string password)
+        {
+            var passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(null, storedHash, password);
+            return result == PasswordVerificationResult.Success;
+        }
+
 
         [HttpGet]
         public IActionResult Register()
@@ -47,29 +58,6 @@ namespace BooksAI.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Register(string email, string password)
-        {
-            if (email == "lipchanskayakatya@gmail.com")
-            {
-                ViewBag.Error = "Этот email принадлежит администратору.";
-                return View();
-            }
-
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (existingUser != null)
-            {
-                ViewBag.Error = "Пользователь с таким email уже существует.";
-                return View();
-            }
-
-            var user = new User { Email = email, Password = password };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            HttpContext.Session.SetString("UserEmail", email);
-            return RedirectToAction("Index", "Home");
-        }
 
         public IActionResult Logout()
         {
