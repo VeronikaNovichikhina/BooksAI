@@ -9,18 +9,28 @@ var builder = WebApplication.CreateBuilder(args);
 // Настройка сервисов
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var connectionString = builder.Configuration.GetConnectionString("MSSQL");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
-builder.Services.AddSession();
+
 
 var app = builder.Build();
 
 app.UseSession();
 app.UseRouting();
 app.MapStaticAssets();
+
+app.UseAuthentication(); 
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
@@ -33,9 +43,8 @@ using (var scope = app.Services.CreateScope())
 
     if (!context.Users.Any(u => u.Email == "admin@example.com"))
     {
-        var passwordHasher = new PasswordHasher<User>();  
-        var hashedPassword = passwordHasher.HashPassword(null, "Admin123");  // Хешируем пароль
-
+        var passwordHasher = new PasswordHasher<User>();
+        var hashedPassword = passwordHasher.HashPassword(null, "Admin123");
         context.Users.Add(new User
         {
             Email = "admin@example.com",

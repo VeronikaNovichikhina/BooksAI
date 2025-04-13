@@ -44,13 +44,20 @@
             </div>
 
             <div class="form-items">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="error-message" style="color:red; text-align:center; margin-bottom:10px;">
+                        @TempData["Error"]
+                    </div>
+                }
+
                 <div class="tab-switch">
                     <button id="loginTab" class="tab active">Вход</button>
                     <button id="registerTab" class="tab">Регистрация</button>
                 </div>
 
                 <div id="loginForm">
-                    <form asp-controller="Index" asp-action="Login" method="post">
+                    <form asp-controller="Account" asp-action="Login" method="post">
                         <div class="form-group">
                             <input type="email" name="email" class="form-control  " placeholder="example@mail.ru" id="loginEmail" required />
                         </div>
@@ -63,7 +70,7 @@
                 </div>
 
                 <div id="registerForm" style="display:none">
-                    <form asp-controller="Index" asp-action="Register" method="post">
+                    <form asp-controller="Account" asp-action="Register" method="post">
                         <div class="form-group">
                             <input type="text" name="username" class="form-control" placeholder="Логин" id="registerUsername" required />
                         </div>
@@ -131,6 +138,7 @@
         document.getElementById("registerUsername").addEventListener("input", checkFormFields);
         document.getElementById("registerEmail").addEventListener("input", checkFormFields);
         document.getElementById("registerPassword").addEventListener("input", checkFormFields);
+
     </script>
     
 </body>

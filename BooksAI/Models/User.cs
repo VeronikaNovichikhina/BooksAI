@@ -10,7 +10,7 @@ namespace BooksAI.Models
 
         public string Role { get; set; } = "User";
 
-        public bool IsAdmin => Email == "admin@mail.com";//вставите почту админа
+        public bool IsAdmin => Email == "admin@example.com";//вставите почту админа
     }
 
 }
