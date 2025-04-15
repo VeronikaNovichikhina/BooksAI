@@ -1,33 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BooksAI.Models;
+using BooksAI.Data;
 
 namespace BooksAI.Controllers
 {
     public class GenresDetailController : Controller
     {
+        private readonly ApplicationDbContext _db;
+
+        public GenresDetailController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         public IActionResult Index(string name)
         {
+            // Проверяем, что имя жанра передано
+            if (string.IsNullOrEmpty(name))
+            {
+                return RedirectToAction("Error");
+            }
+
+            // Получаем книги жанра (сравниваем как строки)
+            var books = _db.Books
+                .Where(b => b.Genre.ToString().ToLower() == name.ToLower())
+                .ToList();
+
             ViewData["GenreName"] = name;
-           
-
-            var books = new List<Book>
-        {
-            new Book { Title = "Книга 1", Author = "Автор 1", Pages = "qwerrghjklkjhgfdsfghjkqwertyuiop[sdfghjkl;sdfghjk", Price = 500 },
-            new Book { Title = "Книга 2", Author = "Автор 2", Pages = "qwerrghjklkjhgfdsfghjk", Price = 600 },
-            new Book { Title = "Книга 3", Author = "Автор 3", Pages = "qwerrghjklkjhgfdsfghjk", Price = 300 },
-            new Book { Title = "Книга 4", Author = "Автор 4", Pages = "qwerrghjklkjhgfdsfghjk", Price = 700 },
-            new Book { Title = "Книга 1", Author = "Автор 1", Pages = "qwerrghjklkjhgfdsfghjk", Price = 500 },
-            new Book { Title = "Книга 6", Author = "Автор 6", Pages = "qwerrghjklkjhgfdsfghjk", Price = 600 },
-            new Book { Title = "Книга 2", Author = "Автор 2", Pages = "qwerrghjklkjhgfdsfghjk", Price = 300 },
-            new Book { Title = "Книга 8", Author = "Автор 8", Pages = "qwerrghjklkjhgfdsfghjk", Price = 700 },
-            new Book { Title = "Книга 1", Author = "Автор 1", Pages = "qwerrghjklkjhgfdsfghjk", Price = 500 },
-            new Book { Title = "Книга 3", Author = "Автор 3", Pages = "qwerrghjklkjhgfdsfghjk", Price = 600 },
-            new Book { Title = "Книга 3", Author = "Автор 3", Pages = "qwerrghjklkjhgfdsfghjk", Price = 300 },
-            new Book { Title = "Книга 12", Author = "Автор 12", Pages = "qwerrghjklkjhgfdsfghjk", Price = 700 }
-        };
-
             return View(books);
         }
-       
+
     }
 }

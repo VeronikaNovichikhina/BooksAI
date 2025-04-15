@@ -1,12 +1,8 @@
-﻿@using static BooksAI.Controllers.GenresDetailController
-@using BooksAI.Models
-
-
+﻿@* @using static BooksAI.Controllers.GenresDetailController *@
 @{
     ViewData["Title"] = "Жанр";
-
 }
-@model IEnumerable<Book>
+@model List<Book>
 <link rel="stylesheet" href="~/css/genresdetail.css" />
 <script src="~/js/site.js"></script>
 
@@ -15,7 +11,7 @@
         <h2>Книги жанра: @ViewData["GenreName"]</h2>
     </div>
 
-    @if (Model != null && Model.Any())
+    @if (Model != null || Model.Any())
     {
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Поиск книг..." onkeyup="searchBooks()" />
@@ -26,20 +22,12 @@
             {
                 <div class="card">
                     <div class="card-detail">
-                        <div class="placeholder-img"></div>
+                       
                         <h5 class="card-title">@book.Title</h5>
                         <p class="card-author">Автор: @book.Author</p>
-                        <p class="card-text">Цена: @book.Price</p>
-
-                        <p class="card-text">Описание:
-                            <span class="short-desc"></span>
-                            <span class="dots" onclick="toggleDescription(this)">....... </span>
-                        </p>
-                        <div class="full-description" style="display:none;">
-                            <p>@book.Pages</p>
-                        </div>
-
-                        <button class="btn">Добавить в корзниу</button>
+                        <p class="card-text">Цена: @book.Price.ToString("C")</p>
+                        <p class="card-text">Год выпуска: @book.Year</p>
+                        <button class="btn">Добавить в корзину</button>
                     </div>
                 </div>
             }
@@ -47,7 +35,8 @@
     }
     else
     {
-        
+        <div class="no-books">
+            <p>Книги этого жанра пока отсутствуют</p>
+        </div>
     }
-
 </div>
