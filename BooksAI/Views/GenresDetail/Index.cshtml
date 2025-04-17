@@ -1,18 +1,20 @@
-﻿@* @using static BooksAI.Controllers.GenresDetailController *@
+﻿@using static BooksAI.Controllers.GenresDetailController 
 @{
     ViewData["Title"] = "Жанр";
 }
-@model List<Book>
+@model IEnumerable<Book>
 <link rel="stylesheet" href="~/css/genresdetail.css" />
 <script src="~/js/site.js"></script>
 
 <div class="container">
+    <img src="~/images/MaskGroup.png" alt="pero" class="background-image " />
     <div class="container-title">
         <h2>Книги жанра: @ViewData["GenreName"]</h2>
     </div>
 
     @if (Model != null || Model.Any())
     {
+
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Поиск книг..." onkeyup="searchBooks()" />
         </div>
@@ -20,14 +22,39 @@
         <div class="detail">
             @foreach (var book in Model)
             {
+                var isLong = book.Description.Length > 150;
+                var shortDescription = isLong
+                ? book.Description.Substring(0, 150) + "..."
+                : book.Description;
                 <div class="card">
                     <div class="card-detail">
-                       
-                        <h5 class="card-title">@book.Title</h5>
-                        <p class="card-author">Автор: @book.Author</p>
-                        <p class="card-text">Цена: @book.Price.ToString("C")</p>
-                        <p class="card-text">Год выпуска: @book.Year</p>
-                        <button class="btn">Добавить в корзину</button>
+                        <div class="placeholder-img">
+                            <img src="@Url.Action("GetImage", "Dashboard", new { id = book.Id })" alt="Обложка"  />
+                        </div>
+                        <div class="card-info">
+                            <div class="card-title">@book.Title</div>
+                            <div class="card-author">Автор: @book.Author</div>
+                            <div class="card-year">Год выпуска: @book.Year</div>
+                            <div class="card-text">
+                                Описание:
+                                <span id="desc-short-@book.Id">@Html.Raw(book.Description.Length > 50 ? book.Description.Substring(0, 150) + "..." : book.Description)</span>
+                                <span id="desc-full-@book.Id" class="d-none">@book.Description</span>
+                                @if (book.Description.Length > 150)
+                                {
+                                    <a href="javascript:void(0);" id="toggle-link-@book.Id" onclick="toggleDescription(@book.Id)">Читать далее</a>
+                                }
+                            </div>
+                            <button class="btn add-to-cart" data-book-id="@book.Id">@book.Price.ToString("C") Добавить в корзину</button>
+                            @if (Context.Session.GetString("UserRole") == "Admin")
+                            {
+                                <div class="admin-controls">
+                                    <form asp-action="Delete" asp-controller="Dashboard" method="post">
+                                        <input type="hidden" name="id" value="@book.Id" />
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту книгу?')">Удалить книгу</button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             }

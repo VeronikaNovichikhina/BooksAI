@@ -1,17 +1,20 @@
 ﻿using BooksAI.Data;
 using BooksAI.Models;
+using BooksAI.Services.BookService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+
 
 public class DashboardController : Controller
 {
-    private readonly ApplicationDbContext _db;
-
-    public DashboardController(ApplicationDbContext db)
+    private readonly IBookService _bookService;
+    public DashboardController( IBookService bookService)
     {
-        _db = db;
+        _bookService = bookService;
     }
-
-    // GET: /Dashboard/AdminPanel
     public IActionResult AdminPanel()
     {
         if (HttpContext.Session.GetString("UserEmail") != "admin@example.com")
@@ -22,38 +25,45 @@ public class DashboardController : Controller
         ViewBag.Message = "Добро пожаловать, Администратор!";
         return View();
     }
-
     [HttpPost]
-    public async Task<IActionResult> AddBook(Book book)
+    public async Task<IActionResult> AddBook(Book book, IFormFile imageFile)
     {
-
         if (!ModelState.IsValid)
         {
-            // Вывод ошибок в консоль
-            foreach (var entry in ModelState)
-            {
-                if (entry.Value.Errors.Count > 0)
-                {
-                    Console.WriteLine($"{entry.Key}: {string.Join(", ", entry.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
-            }
             return View("AdminPanel", book);
         }
+        
+        var result = await _bookService.AddBookAsync(book, imageFile);
 
-
-        try
+        if (result.Success)
         {
-
-            _db.Books.Add(book);
-            await _db.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Книга успешно добавлена!";
+            TempData["SuccessMessage"] = result.Message;
             return RedirectToAction("AdminPanel");
         }
-        catch (Exception ex)
-        {
-            TempData["ErrorMessage"] = "Ошибка: " + ex.Message;
-            return View("AdminPanel", book);
-        }
+
+        TempData["ErrorMessage"] = result.Message;
+        return View("AdminPanel", book);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _bookService.DeleteBookAsync(id);
+
+        if (result.Success)
+            TempData["SuccessMessage"] = result.Message;
+        else
+            TempData["ErrorMessage"] = result.Message;
+
+        return RedirectToAction("AdminPanel");
+    }
+
+    public async Task<IActionResult> GetImage(int id)
+    {
+        var imageData = await _bookService.GetBookImageAsync(id);
+        if (imageData == null) return NotFound();
+
+        var book = await _bookService.GetBookByIdAsync(id);
+        return File(imageData, book.ImageMimeType);
     }
 }

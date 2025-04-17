@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -19,11 +20,24 @@
             </div>
             <nav>
                 <ul class="nav">
+                    @{
+                        var isAdmin = Context.Session.GetString("IsAdmin") == "true";
+                    }
+
+                    @if (isAdmin)
+                    {
+                        <div class="nav">
+                            <a asp-controller="Dashboard" asp-action="AdminPanel" class="admin-button">
+                                <img src="~/images/admin.png" alt="admin" title="Панель администратора" />
+                            </a>
+                        </div>
+                    }
                     <li><a asp-controller="Home" asp-action="Index">Главная</a></li>
                     <li><a asp-controller="Genres" asp-action="Index">Жанры</a></li>
                     <li><a asp-controller="About" asp-action="Index">О сервисе</a></li>
                 </ul>
             </nav>
+
             @if (!string.IsNullOrEmpty(Context.Session.GetString("UserEmail")))
             {
                 <div class="nav">
@@ -44,6 +58,7 @@
                     </a>
                 </div>
             }
+            
         </header>
     </div>
 

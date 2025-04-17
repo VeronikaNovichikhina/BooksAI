@@ -12,21 +12,41 @@ namespace BooksAI.Controllers
         {
             _db = db;
         }
-
+        private Dictionary<string, string> GetGenreTranslations()
+        {
+            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        {"Fiction", "Художественная литература"},
+        {"NonFiction", "Нехудожественная литература"},
+        {"Mystery", "Детектив"},
+        {"Fantasy", "Фэнтези"},
+        {"ScienceFiction", "Научная фантастика"},
+        {"Biography", "Биография"},
+        {"Romance", "Роман"},
+        {"Thriller", "Триллер"},
+        {"Horror", "Ужасы"},
+        {"HistoricalFiction", "Исторический роман"}
+    };
+        }
         public IActionResult Index(string name)
         {
-            // Проверяем, что имя жанра передано
             if (string.IsNullOrEmpty(name))
             {
                 return RedirectToAction("Error");
             }
 
-            // Получаем книги жанра (сравниваем как строки)
+            var genreTranslations = GetGenreTranslations();
+
+            if (!genreTranslations.ContainsKey(name))
+            {
+                return RedirectToAction("Error");
+            }
+
             var books = _db.Books
                 .Where(b => b.Genre.ToString().ToLower() == name.ToLower())
                 .ToList();
 
-            ViewData["GenreName"] = name;
+            ViewData["GenreName"] = genreTranslations[name]; 
             return View(books);
         }
 

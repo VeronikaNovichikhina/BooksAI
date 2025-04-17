@@ -1,20 +1,22 @@
 using BooksAI.Data;
 using BooksAI.Models;
+using BooksAI.Services.BookService;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Настройка сервисов
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-builder.Services.AddSession(options =>
+
+builder.Services.AddAuthorization(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim("IsAdmin", "true"));
 });
+
+builder.Services.AddSession();
 
 var connectionString = builder.Configuration.GetConnectionString("MSSQL");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -10,6 +10,7 @@ namespace BooksAI.Controllers
         
         public IActionResult Index()
         {
+            
             return View();
         }
         

@@ -1,5 +1,4 @@
-﻿
-.container-title {
+﻿.container-title {
     margin-top: 25px;
     margin-left: 10px;
 }
@@ -7,58 +6,91 @@
 .detail {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    margin-top: 40px;
+    justify-content: flex-start; 
+    gap: 75px;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.7);
+    
 }
-.card{
-    min-width:280px;
-}
+
 .card-detail {
-    padding: 5px 20px 20px;
-    border-radius: 15px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    min-width: 280px;
+    flex: 0 0 calc(30% - 20px); 
+    max-width: 350px;
     background: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.placeholder-img {
-    height: 250px;
-    width: 270px;
-    background: lightgrey;
-    border-radius: 5px;
+
+.card-title {
+    font-weight: bold;
+    font-size: 20px;
     margin-top: 10px;
-    margin-bottom: 20px;
+}
+
+.card-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: #555;
+}
+
+.placeholder-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align:center;
+}
+
+.placeholder-img img {
+   width: 70%;
+   height: 70%;
+   object-fit: cover;
+   border-radius: 5px;
 }
 
 .btn {
-    display:block;
-    margin:15px auto 5px;
+    display: block;
+    margin: 10px auto 5px;
     background: linear-gradient(to right, orange, darkorange);
     border: none;
     color: white;
-    cursor:pointer;
-}
-.dots {
-    color: blue;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
-    text-decoration: underline;
+    transition: 0.3s;
 }
+
+.btn:hover {
+      filter: brightness(90%);
+ }
 
 .full-description {
     margin-top: 10px;
     color: #333;
+    font-size: 14px;
+}
+
+.d-none {
+    display: none;
 }
 
 .search-bar {
     margin-bottom: 20px;
     padding-top: 20px;
 }
+
 .search-bar input {
-     width: 100%;
-     padding: 10px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
-     font-size: 16px;
+        width: 97%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
 }
+
+

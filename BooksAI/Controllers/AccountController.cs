@@ -22,7 +22,7 @@ namespace BooksAI.Controllers
         {
 
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (user == null || !VerifyPassword(user.Password, password))  // Проверка пароля
+            if (user == null || !VerifyPassword(user.Password, password)) 
             {
                 TempData["Error"] = "Неправильный email или пароль.";
                 return RedirectToAction("Index", "Home");
@@ -33,13 +33,13 @@ namespace BooksAI.Controllers
 
             if (user.Role == "Admin")
             {
+                HttpContext.Session.SetString("IsAdmin", "true");
                 return RedirectToAction("AdminPanel", "Dashboard"); 
             }
 
             return RedirectToAction("Index", "Home");
         }
 
-        // Метод для проверки пароля
         private bool VerifyPassword(string storedHash, string password)
         {
             var passwordHasher = new PasswordHasher<User>();
@@ -51,34 +51,49 @@ namespace BooksAI.Controllers
         [HttpPost]
         public IActionResult Register(string email, string password)
         {
-            if (email == "admin@example.com")
+            try
             {
-                TempData["Error"] = "Этот email принадлежит администратору.";
-                return RedirectToAction("Index", "Home");
+                if (email == "admin@example.com")
+                {
+                    TempData["Error"] = "Этот email принадлежит администратору.";
+                    return RedirectToAction("Index", "Home");
+                }
+                if (_context.Users.Any(u => u.Email == email))
+                {
+                    TempData["Error"] = "Пользователь с таким email уже существует.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                var passwordHasher = new PasswordHasher<User>();
+                var user = new User
+                {
+                    Email = email,
+                    Password = passwordHasher.HashPassword(null, password), // Хеширование пароля
+                    Role = "User"
+                };
+
+                _context.Users.Add(user);
+                _context.SaveChanges();
             }
-            if (_context.Users.Any(u => u.Email == email))
+            catch (Exception ex)
             {
-                TempData["Error"] = "Пользователь с таким email уже существует.";
-                return RedirectToAction("Index", "Home");
+                TempData["Error"] = "Произошла ошибка при регистрации: " + ex.Message;
+                
             }
-
-            var passwordHasher = new PasswordHasher<User>();
-            var user = new User
-            {
-                Email = email,
-                Password = passwordHasher.HashPassword(null, password), // Хеширование пароля
-                Role = "User"
-            };
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("UserEmail");
-            return RedirectToAction("Login");
+            try
+            {
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

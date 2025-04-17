@@ -6,138 +6,64 @@
 <link rel="stylesheet" href="~/css/basket.css" />
 
 <div class="container">
+    <img src="~/images/MaskGroup.png" alt="pero" class="background-image" />
     <div class="container-title">
         <h2>Корзина</h2>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">@TempData["Message"]</div>
+        }
     </div>
     <div class="main-detail">
         <div class="basket-detail books">
-            <div class="basket-card">
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
+            @if (Model.Any())
+            {
+                <div class="basket-card">
+                    @foreach (var item in Model)
+                    {
+                        <div class="basket-card-detail">
+                            <div class="placeholder-img">
+                                <img src="@Url.Action("GetImage", "Dashboard", new { id = item.Book.Id })" alt="Книга">
+                            </div>
+                            <div class="text-content">
+                                <h3 class="basket-card-title">@item.Book.Title</h3>
+                                <p class="basket-card-text">Жанр: @item.Book.Genre</p>
+                                <p class="basket-card-text">Автор: @item.Book.Author</p>
+                                <p class="basket-card-text">Год: @item.Book.Year</p>
+                            </div>
+                            <div class="basket-cart-controls">
+                                <form asp-action="UpdateCart" method="post">
+                                    <input type="hidden" name="bookId" value="@item.BookId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
+                                    <button type="submit" class="btn-update">Обновить</button>
+                                </form>
+                                <div class="price-container">
+                                    <p class="basket-card-text">Цена: @((item.Book.Price * item.Quantity).ToString("C"))</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
-                        </div>
-                    </div>
+            }
+            else
+            {
+                <div class="empty-cart">
+                    <p>Ваша корзина пуста</p>
                 </div>
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="basket-card-detail">
-                    <div class="placeholder-img">
-                        <img src="#" alt="Книга">
-                    </div>
-                    <div class="text-content">
-                        <h3 class="basket-card-title">Название книги</h3>
-                        <p class="basket-card-text">Жанр: </p>
-                        <p class="basket-card-text">Автор: </p>
-                        <p class="basket-card-text">Год: </p>
-                    </div>
-                    <div class="basket-cart-controls">
-                        <button>-</button>
-                        <span class="quantity">1</span>
-                        <button>+</button>
-                        <div class="price-container">
-                            <p class="basket-card-text">Цена: </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
-        <div class="basket-detail summary">
-            <div class="basket-card">
-                <div class="basket-card-detail-2">
-                    <h2>Нужно войти в аккаунт</h2>
-                    <div class="foot">
-                        <strong>Итого :</strong>
-                        <button class="btn-pay" >Оплатить</button>
-                    </div> 
-                </div>
-            </div>
-        </div>
+        @* <div class="basket-detail summary"> *@
+        @*     <div class="basket-card"> *@
+        @*         <div class="basket-card-detail-2"> *@
+        @*             <h2>Оформление заказа</h2> *@
+        @*             <div class="foot"> *@
+        @*                 <strong>Итого: @Model.Sum(i => i.Book.Price * i.Quantity).ToString("C")</strong> *@
+        @*                 <form asp-action="Checkout" method="post"> *@
+        @*                     <button type="submit" class="btn-pay">Оплатить</button> *@
+        @*                 </form> *@
+        @*             </div> *@
+        @*         </div> *@
+        @*     </div> *@
+        @* </div> *@
     </div>
 </div>

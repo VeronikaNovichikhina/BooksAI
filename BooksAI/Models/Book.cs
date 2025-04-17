@@ -1,4 +1,6 @@
-﻿namespace BooksAI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BooksAI.Models
 {
     public class Book
     {
@@ -10,6 +12,12 @@
         public decimal Price { get; set; }
 
         public string Year { get; set; }
+
+        public string Description { get; set; }
+
+        public byte[]? ImageData { get; set; }
+
+        public string? ImageMimeType { get; set; }
 
     }
 
