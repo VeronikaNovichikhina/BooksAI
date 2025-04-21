@@ -1,0 +1,61 @@
+﻿
+@model User;
+@{
+    ViewData["Title"] = "Мой профиль";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="profile-container">
+    <h2>Мой профиль</h2>
+
+    <div class="profile-info">
+        <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value">@Model.Email</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Роль:</span>
+            <span class="info-value">@Model.Role</span>
+        </div>
+    </div>
+
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <button type="submit" class="btn btn-danger">Выйти</button>
+    </form>
+</div>
+
+<style>
+    .profile-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .profile-info {
+        margin-bottom: 20px;
+    }
+
+    .info-row {
+        margin: 15px 0;
+        padding: 10px;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .info-label {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #555;
+    }
+
+    .btn-danger {
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+    }
+</style>

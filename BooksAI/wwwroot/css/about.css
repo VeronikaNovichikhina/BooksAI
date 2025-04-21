@@ -1,0 +1,19 @@
+﻿
+.service {
+    margin-top: 40px;
+   
+}
+.service-title {
+    
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+}
+.service-text {
+    margin-top: 40px;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}

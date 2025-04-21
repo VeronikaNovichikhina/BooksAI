@@ -1,0 +1,37 @@
+.admin-panel{
+	margin-top:40px;
+	line-height:40px;
+	margin-bottom:10px;
+}
+
+.btn-admin {
+	display: inline-block;
+	margin-top: 5px;
+	margin-bottom:25px;
+	padding: 10px 20px;
+	border-radius: 10px;
+	background: linear-gradient(to right, #CB9665, #EC7F1A );
+	text-align: center;
+	transition: 0.3s;
+	font-size: 15px;
+	min-width: 150px;
+	border: none;
+	cursor: pointer;
+}
+
+.btn-admin:hover {
+	filter: brightness(85%);
+}
+.form-control-admin {
+	padding: 10px;
+	border-radius: 9px;
+	border-color: lightgray;
+	width: 50%;
+	margin-bottom: 15px;
+	height: 20px;
+}
+textarea.form-control-admin{
+	resize:none;
+	height:auto;
+	line-height:1.5;
+}

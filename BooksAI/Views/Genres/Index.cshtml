@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Genres";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<link rel="stylesheet" href="~/css/genres.css" />
+<div class="catalog">
+    <div class="container">
+        <img src="~/images/MaskGroup.png" alt="pero" class="background-image " />
+        <div class="catalog-title">
+            Выберите жанр книги
+        </div>
+        <div class="genres-container">
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Fiction" class="genre">Художественная литература</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="NonFiction" class="genre">Нехудожественная литература</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Mystery" class="genre">Детектив</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Fantasy" class="genre">Фэнтези</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="ScienceFiction" class="genre">Научная фантастика</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Biography" class="genre">Биография</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Romance" class="genre">Роман</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Thriller" class="genre">Триллер</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="Horror" class="genre">Ужасы</a>
+            <a asp-controller="GenresDetail" asp-action="Index" asp-route-name="HistoricalFiction" class="genre">Исторический роман</a>
+        </div>
+    </div>
+</div>
