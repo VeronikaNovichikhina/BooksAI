@@ -29,7 +29,7 @@ namespace BooksAI.Services.BookService
                 await _db.Books.AddAsync(book);
                 await _db.SaveChangesAsync();
 
-                return new OperationResult { Success = true, Message = "Книга добавлена", Book = book };
+                return new OperationResult { Success = true, Message = "Книга успешно добавлена!;", Book = book };
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace BooksAI.Services.BookService
             _db.Books.Remove(book);
             await _db.SaveChangesAsync();
 
-            return new OperationResult { Success = true, Message = "Книга удалена" };
+            return new OperationResult { Success = true, Message = "Книга удалена!" };
         }
         public async Task<byte[]> GetBookImageAsync(int id)
         {

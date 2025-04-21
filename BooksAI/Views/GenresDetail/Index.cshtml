@@ -5,6 +5,7 @@
 @model IEnumerable<Book>
 <link rel="stylesheet" href="~/css/genresdetail.css" />
 <script src="~/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container">
     <img src="~/images/MaskGroup.png" alt="pero" class="background-image " />
@@ -12,24 +13,41 @@
         <h2>Книги жанра: @ViewData["GenreName"]</h2>
     </div>
 
+    <form asp-action="Index" asp-controller="GenresDetail" method="post">
+        <input type="hidden" name="name" value="@ViewBag.GenreKey" />
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Цена от:</label>
+                <input type="number" name="PriceMin" value="@ViewBag.Filter?.PriceMin" />
+                <label>до:</label>
+                <input type="number" name="PriceMax" value="@ViewBag.Filter?.PriceMax" />
+            </div>
+            <div class="filter-group">
+                <label>Год от:</label>
+                <input type="number" name="YearMin" value="@ViewBag.Filter?.YearMin" />
+                <label>до:</label>
+                <input type="number" name="YearMax" value="@ViewBag.Filter?.YearMax" />
+            </div>
+            <div class="filter-group">
+                <label>Поиск:</label>
+                <input type="text" name="Search" value="@ViewBag.Filter?.Search" />
+            </div>
+            <button type="submit" class="btn">Применить фильтр</button>
+        </div>
+    </form>
     @if (Model != null || Model.Any())
     {
-
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Поиск книг..." onkeyup="searchBooks()" />
-        </div>
-
         <div class="detail">
             @foreach (var book in Model)
             {
-                var isLong = book.Description.Length > 150;
+                var isLong = book.Description.Length > 50;
                 var shortDescription = isLong
-                ? book.Description.Substring(0, 150) + "..."
+                ? book.Description.Substring(0, 50) + "..."
                 : book.Description;
                 <div class="card">
                     <div class="card-detail">
                         <div class="placeholder-img">
-                            <img src="@Url.Action("GetImage", "Dashboard", new { id = book.Id })" alt="Обложка"  />
+                            <img src="@Url.Action("GetImage", "Dashboard", new { id = book.Id })" alt="Обложка" />
                         </div>
                         <div class="card-info">
                             <div class="card-title">@book.Title</div>
@@ -37,23 +55,37 @@
                             <div class="card-year">Год выпуска: @book.Year</div>
                             <div class="card-text">
                                 Описание:
-                                <span id="desc-short-@book.Id">@Html.Raw(book.Description.Length > 50 ? book.Description.Substring(0, 150) + "..." : book.Description)</span>
+                                <span id="desc-short-@book.Id">@Html.Raw(book.Description.Length > 50 ? book.Description.Substring(0, 50) + "..." : book.Description)</span>
                                 <span id="desc-full-@book.Id" class="d-none">@book.Description</span>
-                                @if (book.Description.Length > 150)
+                                @if (book.Description.Length > 50)
                                 {
                                     <a href="javascript:void(0);" id="toggle-link-@book.Id" onclick="toggleDescription(@book.Id)">Читать далее</a>
                                 }
                             </div>
-                            <button class="btn add-to-cart" data-book-id="@book.Id">@book.Price.ToString("C") Добавить в корзину</button>
                             @if (Context.Session.GetString("UserRole") == "Admin")
-                            {
+                            { @if (TempData["SuccessDelete"] != null)
+                                {
+                                    <script>
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Готово!',
+                                            text: '@Html.Raw(TempData["SuccessDelete"])'
+                                        });
+                                    </script>
+                                }
                                 <div class="admin-controls">
-                                    <form asp-action="Delete" asp-controller="Dashboard" method="post">
+                                    <button type="button" class="btn btn-danger" onclick="confirmDelete('@book.Id')">Удалить книгу</button>
+
+                                    <form id="delete-form-@book.Id" asp-action="Delete" asp-controller="Dashboard" method="post" style="display:none;">
                                         <input type="hidden" name="id" value="@book.Id" />
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту книгу?')">Удалить книгу</button>
                                     </form>
                                 </div>
                             }
+                            else
+                            {
+                                <button class="btn add-to-cart" data-book-id="@book.Id">@book.Price.ToString("C") Добавить в корзину</button>
+                            }
+                            
                         </div>
                     </div>
                 </div>
@@ -67,3 +99,21 @@
         </div>
     }
 </div>
+<script>
+    function confirmDelete(bookId) {
+        Swal.fire({
+            title: 'Вы уверены?',
+            text: 'Это действие нельзя отменить!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Да, удалить',
+            cancelButtonText: 'Отмена'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${bookId}`).submit();
+            }
+        });
+    }
+</script>

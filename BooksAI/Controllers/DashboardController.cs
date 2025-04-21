@@ -37,11 +37,11 @@ public class DashboardController : Controller
 
         if (result.Success)
         {
-            TempData["SuccessMessage"] = result.Message;
+            TempData["Success"] = result.Message;
             return RedirectToAction("AdminPanel");
         }
 
-        TempData["ErrorMessage"] = result.Message;
+        TempData["Error"] = result.Message;
         return View("AdminPanel", book);
     }
 
@@ -51,9 +51,9 @@ public class DashboardController : Controller
         var result = await _bookService.DeleteBookAsync(id);
 
         if (result.Success)
-            TempData["SuccessMessage"] = result.Message;
+            TempData["SuccessDelete"] = result.Message;
         else
-            TempData["ErrorMessage"] = result.Message;
+            TempData["Error"] = result.Message;
 
         return RedirectToAction("AdminPanel");
     }

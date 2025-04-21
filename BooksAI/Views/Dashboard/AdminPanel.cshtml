@@ -4,7 +4,9 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <link rel="stylesheet" href="~/css/adminPanel.css" />
-
+<script >
+    <partial name="_ValidationScriptsPartial" />
+</script>
 @model Book
 
 <div class="container">
@@ -15,7 +17,7 @@
     <div class="form-items-admin">
         <div id="adminForm">
             <form asp-controller="Dashboard" asp-action="AddBook" method="post" enctype="multipart/form-data">
-                
+
                 <div class="form-group">
                     <input asp-for="Title" class="form-control-admin" placeholder="Название" />
                     <span asp-validation-for="Title" class="text-danger"></span>
@@ -38,30 +40,30 @@
                     <span asp-validation-for="Genre" class="text-danger"></span>
                 </div>
 
-               
+
                 <div class="form-group">
                     <input asp-for="Author" class="form-control-admin" placeholder="Автор" />
                     <span asp-validation-for="Author" class="text-danger"></span>
                 </div>
 
-                
+
                 <div class="form-group">
                     <input asp-for="Price" class="form-control-admin" placeholder="Цена" type="number" step="0.01" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
-               
+
                 <div class="form-group">
-                    <input asp-for="Year" class="form-control-admin" placeholder="Год (например, 2023)" />
+                    <input asp-for="Year" class="form-control-admin" placeholder="Год"  type="number"/>
                     <span asp-validation-for="Year" class="text-danger"></span>
                 </div>
-                
+
 
                 <div class="form-group">
                     <textarea class="form-control-admin" id="Description" name="Description" rows="3">@Model?.Description</textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                
+
 
                 <div class="form-group">
                     <input name="imageFile" type="file" class="form-control-admin" />
@@ -69,20 +71,15 @@
 
                 <button type="submit" class="btn-admin">Добавить книгу</button>
             </form>
-            @if (!ViewData.ModelState.IsValid)
+            @if (TempData["Success"] != null)
             {
-                <div class="alert alert-danger">
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <p>@error.ErrorMessage</p>
-                    }
-                </div>
-            }
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success mt-3">
-                    @TempData["SuccessMessage"]
-                </div>
+                <script>
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Готово!',
+                    text: '@Html.Raw(TempData["Success"])'
+                    });
+                </script>
             }
         </div>
     </div>

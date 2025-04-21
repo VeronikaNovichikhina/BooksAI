@@ -20,18 +20,6 @@
             </div>
             <nav>
                 <ul class="nav">
-                    @{
-                        var isAdmin = Context.Session.GetString("IsAdmin") == "true";
-                    }
-
-                    @if (isAdmin)
-                    {
-                        <div class="nav">
-                            <a asp-controller="Dashboard" asp-action="AdminPanel" class="admin-button">
-                                <img src="~/images/admin.png" alt="admin" title="Панель администратора" />
-                            </a>
-                        </div>
-                    }
                     <li><a asp-controller="Home" asp-action="Index">Главная</a></li>
                     <li><a asp-controller="Genres" asp-action="Index">Жанры</a></li>
                     <li><a asp-controller="About" asp-action="Index">О сервисе</a></li>
@@ -40,14 +28,29 @@
 
             @if (!string.IsNullOrEmpty(Context.Session.GetString("UserEmail")))
             {
+                var isAdmin = Context.Session.GetString("IsAdmin") == "true";
+                @if (isAdmin)
+                {
+                    <div class="nav">
+                        <a asp-controller="Dashboard" asp-action="AdminPanel" class="admin-button">
+                            <img src="~/images/admin.png" alt="admin" title="Панель администратора" />
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="nav">
+                        <a asp-controller="Basket" asp-action="Index">
+                            <img src="~/images/card.png" alt="card" />
+                        </a>
+                    </div>
+                }
                 <div class="nav">
-                    <a asp-controller="Basket" asp-action="Index">
-                        <img src="~/images/card.png" alt="card" />
-                    </a>
                     <a class="nav-link" asp-controller="Profile" asp-action="Index">
                         <img src="~/images/user.png" alt="login" title="Мой профиль" />
                     </a>
                 </div>
+               
             }
             else
             {
