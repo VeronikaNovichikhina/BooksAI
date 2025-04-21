@@ -83,9 +83,14 @@
                             }
                             else
                             {
-                                <button class="btn add-to-cart" data-book-id="@book.Id">@book.Price.ToString("C") Добавить в корзину</button>
+                                <form asp-controller="Basket" asp-action="AddToCart" method="post">
+                                    <input type="hidden" name="bookId" value="@book.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn add-to-cart">
+                                        @book.Price.ToString("C") Добавить в корзину
+                                    </button>
+                                </form>
                             }
-                            
                         </div>
                     </div>
                 </div>
@@ -94,7 +99,7 @@
     }
     else
     {
-        <div class="no-books">
+        <div class="no-books" style="margin-top: 50px; text-align: center;">
             <p>Книги этого жанра пока отсутствуют</p>
         </div>
     }

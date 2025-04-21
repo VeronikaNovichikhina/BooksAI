@@ -39,17 +39,16 @@
                 }
                 else
                 {
-                    <div class="nav">
+                    <div class="logo-image-card">
                         <a asp-controller="Basket" asp-action="Index">
                             <img src="~/images/card.png" alt="card" />
                         </a>
+                        <a class="nav-link" asp-controller="Profile" asp-action="Index">
+                            <img src="~/images/user.png" alt="login" title="Мой профиль" />
+                        </a>
                     </div>
                 }
-                <div class="nav">
-                    <a class="nav-link" asp-controller="Profile" asp-action="Index">
-                        <img src="~/images/user.png" alt="login" title="Мой профиль" />
-                    </a>
-                </div>
+               
                
             }
             else

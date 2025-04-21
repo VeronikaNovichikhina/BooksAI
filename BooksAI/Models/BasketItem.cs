@@ -1,22 +1,15 @@
-﻿namespace BooksAI.Models
-{
-    public class Cart
-    {
-        public int Id { get; set; }
-        public string UserId { get; set; } 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
-    }
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-    public class CartItem
+namespace BooksAI.Models
+{
+    public class BasketItem
     {
         public int Id { get; set; }
-        public int CartId { get; set; }
-        public Cart Cart { get; set; }
         public int BookId { get; set; }
         public Book Book { get; set; }
-        public int Quantity { get; set; } = 1;
-        public string Year { get; set; }
+        public int Quantity { get; set; }
+        public string BasketId { get; set; }
     }
+
 
 }

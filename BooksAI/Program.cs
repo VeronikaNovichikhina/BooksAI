@@ -1,5 +1,6 @@
 using BooksAI.Data;
 using BooksAI.Models;
+using BooksAI.Services.BasketService;
 using BooksAI.Services.BookService;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
@@ -7,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddScoped<IBasketService, BasketService>();
 
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddAuthorization(options =>
 {

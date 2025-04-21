@@ -2,7 +2,7 @@
     ViewData["Title"] = "Basket";
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
+@model IEnumerable<BasketItem>
 <link rel="stylesheet" href="~/css/basket.css" />
 
 <div class="container">
@@ -19,51 +19,93 @@
             @if (Model.Any())
             {
                 <div class="basket-card">
+
                     @foreach (var item in Model)
                     {
                         <div class="basket-card-detail">
+                            <form asp-action="RemoveItem" method="post" class="remove-form">
+                                <input type="hidden" name="itemId" value="@item.Id" />
+                                <button type="submit" class="remove-btn" title="Удалить">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                         class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5.5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6zm3-.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z" />
+                                        <path fill-rule="evenodd"
+                                              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2h4.793l.853-.854a.5.5 0 0 1 .708 0L9.707 2H14.5a1 1 0 0 1 1 1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z" />
+                                    </svg>
+                                </button>
+                            </form>
                             <div class="placeholder-img">
-                                <img src="@Url.Action("GetImage", "Dashboard", new { id = item.Book.Id })" alt="Книга">
+                                @if (item.Book.ImageData != null && item.Book.ImageMimeType != null)
+                                {
+                                    <img src="@Url.Action("GetImage", "Dashboard", new { id = item.Book.Id })"
+                                    alt="@item.Book.Title" />
+                                }
+                                else
+                                {
+                                    <span>Нет изображения</span>
+                                }
+
                             </div>
                             <div class="text-content">
                                 <h3 class="basket-card-title">@item.Book.Title</h3>
-                                <p class="basket-card-text">Жанр: @item.Book.Genre</p>
                                 <p class="basket-card-text">Автор: @item.Book.Author</p>
                                 <p class="basket-card-text">Год: @item.Book.Year</p>
                             </div>
                             <div class="basket-cart-controls">
-                                <form asp-action="UpdateCart" method="post">
-                                    <input type="hidden" name="bookId" value="@item.BookId" />
-                                    <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
-                                    <button type="submit" class="btn-update">Обновить</button>
+                                <form asp-action="UpdateQuantity" method="post">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <button type="submit" name="quantity" value="@(item.Quantity - 1)"
+                                    class="quantity-btn" @(item.Quantity <= 1 ? "disabled" : "")>
+                                        -
+                                    </button>
+                                    <span class="quantity">@item.Quantity</span>
+                                    <button type="submit" name="quantity" value="@(item.Quantity + 1)"
+                                    class="quantity-btn">
+                                        +
+                                    </button>
                                 </form>
                                 <div class="price-container">
                                     <p class="basket-card-text">Цена: @((item.Book.Price * item.Quantity).ToString("C"))</p>
+
                                 </div>
+
                             </div>
                         </div>
+
                     }
                 </div>
+
             }
             else
             {
                 <div class="empty-cart">
                     <p>Ваша корзина пуста</p>
+                    <a href="/" class="btn">Вернуться к покупкам</a>
                 </div>
             }
         </div>
-        @* <div class="basket-detail summary"> *@
-        @*     <div class="basket-card"> *@
-        @*         <div class="basket-card-detail-2"> *@
-        @*             <h2>Оформление заказа</h2> *@
-        @*             <div class="foot"> *@
-        @*                 <strong>Итого: @Model.Sum(i => i.Book.Price * i.Quantity).ToString("C")</strong> *@
-        @*                 <form asp-action="Checkout" method="post"> *@
-        @*                     <button type="submit" class="btn-pay">Оплатить</button> *@
-        @*                 </form> *@
-        @*             </div> *@
-        @*         </div> *@
-        @*     </div> *@
-        @* </div> *@
+        <div class="basket-detail summary">
+            <div class="basket-card">
+                <div class="basket-card-detail-2">
+                    <p>Оформление заказа</p>
+                    <div class="summary-details">
+                        <h3>Общая сумма: @ViewBag.Total.ToString("C")</h3>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserEmail")))
+                    {
+                        <div class="foot">
+                            <form asp-action="Checkout" method="post">
+                                <button type="submit" class="btn-pay">Оплатить</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="no-account">Для совершения оплаты нужно войти в аккаунт!</p>
+                    }
+                </div>
+            </div>
+        </div>
+       
     </div>
 </div>
