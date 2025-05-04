@@ -30,7 +30,7 @@ namespace BooksAI.Controllers
     };
         }
         [HttpGet]
-        public IActionResult Index(string name)
+        public IActionResult Index(string name, int page = 1, int pageSize = 6)
         {
             if (string.IsNullOrEmpty(name))
             {
