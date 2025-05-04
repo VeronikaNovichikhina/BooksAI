@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BooksAI.Models;
 using BooksAI.Data;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using BooksAI.Models.ViewModel;
 
 namespace BooksAI.Controllers
 {
@@ -16,7 +17,7 @@ namespace BooksAI.Controllers
         private Dictionary<string, string> GetGenreTranslations()
         {
             return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-    {
+            {
         {"Fiction", "Художественная литература"},
         {"NonFiction", "Нехудожественная литература"},
         {"Mystery", "Детектив"},
@@ -27,10 +28,10 @@ namespace BooksAI.Controllers
         {"Thriller", "Триллер"},
         {"Horror", "Ужасы"},
         {"HistoricalFiction", "Исторический роман"}
-    };
+            };
         }
         [HttpGet]
-        public IActionResult Index(string name, int page = 1, int pageSize = 6)
+        public IActionResult Index(string name, int page = 1, int pageSize = 3)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -44,18 +45,27 @@ namespace BooksAI.Controllers
                 return RedirectToAction("Error");
             }
 
-            var books = _db.Books
-                .Where(b => b.Genre.ToString().ToLower() == name.ToLower())
+            var query = _db.Books
+                .Where(b => b.Genre.ToString().ToLower() == name.ToLower());
+                
+            int totalBooks = query.Count();
+            var books = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
+
+            PaginatedBooksViewModel model = new PaginatedBooksViewModel(totalBooks, page, pageSize);
+            IndexViewModel indexModel = new IndexViewModel(books, new BookFilterModel(), model);
+
 
             ViewData["GenreName"] = genreTranslations[name];
             ViewBag.GenreKey = name;
-            ViewBag.Filter = new BookFilterModel();
+            
 
-            return View(books);
+            return View(indexModel);
         }
         [HttpPost]
-        public IActionResult Index(string name, BookFilterModel filter)
+        public IActionResult Index(string name, BookFilterModel filter, int page = 1, int pageSize = 3)
         {
             var books = _db.Books.Where(b => b.Genre.ToString().ToLower() == name.ToLower());
 
@@ -71,11 +81,21 @@ namespace BooksAI.Controllers
                 books = books.Where(b => b.Title.Contains(filter.Search) || b.Author.Contains(filter.Search));
 
             var genreTranslations = GetGenreTranslations();
+
+            int totalBooks = books.Count();
+            var bk= books
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            PaginatedBooksViewModel model = new PaginatedBooksViewModel(totalBooks, page, pageSize);
+            IndexViewModel indexModel = new IndexViewModel(bk, filter, model);
+
             ViewData["GenreName"] = genreTranslations[name];
             ViewBag.GenreKey = name;
-            ViewBag.Filter = filter;
+            
 
-            return View(books.ToList());
+            return View(indexModel);
         }
 
 

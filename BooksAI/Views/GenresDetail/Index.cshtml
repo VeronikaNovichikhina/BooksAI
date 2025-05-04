@@ -1,8 +1,9 @@
-﻿@using static BooksAI.Controllers.GenresDetailController 
+﻿@using BooksAI.Models.ViewModel
+@using static BooksAI.Controllers.GenresDetailController 
 @{
     ViewData["Title"] = "Жанр";
 }
-@model IEnumerable<Book>
+@model IndexViewModel
 <link rel="stylesheet" href="~/css/genresdetail.css" />
 <script src="~/js/site.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -35,10 +36,10 @@
             <button type="submit" class="btn">Применить фильтр</button>
         </div>
     </form>
-    @if (Model != null || Model.Any())
+    @if (Model != null && Model.Books.Any())
     {
         <div class="detail">
-            @foreach (var book in Model)
+            @foreach (var book in Model.Books)
             {
                 var isLong = book.Description.Length > 50;
                 var shortDescription = isLong
@@ -96,6 +97,24 @@
                 </div>
             }
         </div>
+        <div class="pagination" style="text-align:center; margin-top: 30px;">
+            @if (Model.Pagination.HasPreviousPage)
+            {
+                <a asp-action="Index"
+                   asp-route-name = "@ViewBag.GenreKey"
+                   asp-route-page="@(Model.Pagination.PageNumber - 1)" class="glyphicon glyphicon-chevron-left">
+                    Назад
+                </a>
+            }
+            @if (Model.Pagination.HasNextPage)
+            {
+                <a asp-action="Index"
+                   asp-route-name="@ViewBag.GenreKey"
+                   asp-route-page="@(Model.Pagination.PageNumber + 1)" class="glyphicon glyphicon-chevron-right">
+                    Вперед
+                </a>
+            }
+        </div>
     }
     else
     {
@@ -122,3 +141,21 @@
         });
     }
 </script>
+<style>
+    .glyphicon {
+        display: inline-block;
+        padding-bottom:20px;
+        color: white;
+        text-decoration: none
+    }
+
+    .glyphicon-chevron-right:after {
+        content: "\00BB";
+        color: white;
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\00AB";
+        color: white;
+    }
+</style>

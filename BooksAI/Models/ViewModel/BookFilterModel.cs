@@ -1,4 +1,4 @@
-﻿namespace BooksAI.Models
+﻿namespace BooksAI.Models.ViewModel
 {
     public class BookFilterModel
     {

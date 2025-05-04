@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
 
